@@ -1,86 +1,232 @@
 
-const suits = ["Spades", "Hearts", "Diamonds", "Clubs"];
-const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-const deck = new Array();
-const palyers = new Array();
-const currentPlayer = 0;
+const suits = ['Hearts', 'Clubs', 'Diamonds', 'Spades'];
+const values = ['Ace', 'King', 'Queen', 'Jack', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
+textArea = document.getElementById('text-area');
+newGameButton = document.getElementById('new-game-button');
+hitButton = document.getElementById('hit-button');
+stayButton = document.getElementById('stay-button');
 
-/*
-function createDeck()
-{
-	var deck = new Array();
+hitButton.style.display = '';
+stayButton.style.display = '';
 
-	for(var i = 0; i < suits.length; i++)
-	{
-		for(var x = 0; x < values.length; x++)
-		{
-			var card = {Value: values[x], Suit: suits[i]};
-			deck.push(card);
-		}
-	}
+let gameStart = false,
+  gameOver = false,
+  playWon = false,
+  dealerCards = [],
+  playerCards = [],
+  dealerScore = 0,
+  playerScore = 0,
+  deck = [];
 
-	return deck;
-} 
+newGameButton.addEventListener('click', 
+function() {
+  gameStarted = true;
+  gameOver = false;
+  playerWon = false;
 
-*/
-
-
-//deck 
+  deck = createDeck();
+  shuffleDeck(deck);
+  
+  dealerCards = [nextCard(), nextCard()];
+  playerCards = [nextCard(), nextCard()];
+  newGameButton.style.display = '';
+  hitButton.style.display = '';
+  stayButton.style.display = '';
+  showStatus();
+})
 
 function createDeck() {
-    const deck = new Array();
-    for (let i = 0 ; i < values.length; i++)
-    {
-        for(let x = 0; x < suits.length; x++)
-        {
-            let theSymbolOne = parseInt(values[i]);
-            if (values[i] == "J" || values[i] == "Q" || values[i] == "K")
-                theSymbolOne = 10;
-            if (values[i] == "A")
-                theSymbolOne = 11; 
-            let card = { Value: values[i], Suit: suits[x], TheSymbolOne: theSymbolOne};
-            deck.push(card);
-        }
+  let deck = []
+  for (let i = 0; i < suits.length; i++) {
+    for (let x = 0; x < values.length; x++) {
+      const card = {
+        suit: suits[i],
+        value: values[x]
+      }
+      deck.push(card);
     }
-} 
+  }
+  return deck;
+}
+
+function shuffleDeck(deck){
+  for(let i = 0; i < deck.length; i++)
+  {
+    const x = Math.floor(Math.random() *deck.length);
+    const sim = deck[x];
+    deck[x] = deck[i];
+    deck[i] = sim; 
+  }
+}
 
 
-// players
+function getCard(card) {
+    return card.value + "  " + card.suit;
+  }
+  
+  function CardValue(card){
+    switch(card.value){
+            /*
+      case "Jack":
+        return 10;
+      case 'Kind':
+        return 10;
+      case 'Queen':
+        return 10;  
+          */
+      case 'Ace':
+        return 11;
+            break;
+      case '2':
+        return 2;
+        break;
+      case '3':
+        return 3;
+        break;
+      case '4':
+        return 4;
+        break;
+      case '5':
+        return 5;
+        break;
+      case '6':
+        return 6;
+        break;
+      case '7':
+        return 7;
+        break;
+      case '8':
+        return 8;
+        break;
+      case '9':
+        return 9;
+        break;
 
-function createPlayers(num)
-{
-    players = new Array();
-    for(let i = 1; i <= num; i++)
-    {
-        let hand = new Array();
-        let player = { Name: 'Player ' + i, ID: i, Points: 0, Hand: hand };
-        players.push(player);
+      default:
+        return 10;
+        break; 
+    }
+  }
+
+
+
+hitButton.addEventListener('click',
+ function(){
+    
+  playerCards.push(nextCard());
+  checkEnd();
+  showStatus();
+});
+
+stayButton.addEventListener('click', 
+function(){
+  gameOver = true;
+  
+  checkEnd();
+  showStatus();
+});
+
+
+function checkEnd(){
+  updateScores();
+  
+  if(gameOver){
+    while(dealerScore < playerScore &&
+          playerScore <= 21 &&
+          dealerScore <= 21){
+              
+            dealerCards.push(nextCard());
+            updateScores();
+    }
+  }
+  
+    if ( playerScore > 21) {
+      playerWon=false;
+      gameOver = true;
+    }
+    
+    else if (dealerScore > 21) {
+      playerWon = true;
+      gameOver = true;
+    }
+    
+    else if (gameOver){
+      if(playerScore > dealerScore) {
+        playerWon = true;
+      }
+      else{
+        playerWon = false;
+      }
     }
 }
 
 
-function creatPlayerPretty() {
-    document.getElementById('players').innerHTML = ''
-    for (let i = 0; i < players.length; i++) {
+function showStatus()
+{
+  if(!gameStarted)
+  {
+      
+    textArea.innerHTML = 'This Is A Blackjack Game';
+    return; 
+  }
+  
+  let dealerCardString = '';
+  for(let i = 0; i < dealerCards.length; i++)
+  {
+      
+    dealerCardString += getCard (dealerCards[i]) ;
+  }
+  let playerCardString='';
+  for(let i = 0; i < playerCards.length; i++)
+  {
+     
+    playerCardString += getCard(playerCards[i]) ;
+  }
+  
+  updateScores();
+  
+  textArea.innerHTML = 
+  'Dealer :' + dealerCardString + '(score: ' + dealerScore + ')'
+   +
+   'Player :' + playerCardString + '(score: ' + playerScore + ')';
+                        
+  if(gameOver){
 
+    if(playerWon)
+    {
+       
+      textArea.innerHTML += "YOU WIN";
     }
+
+    else{
+        
+      textArea.innerHTML += "DEALER WINS";
+    }
+
+    newGameButton.style.display = '';
+    hitButton.style.display = '';
+    stayButton.style.display = '';
+    
+  }
+}
+
+function getScore(cardArray){
+  let score = 0;
+  for(let i = 0; i < cardArray.length; i++) {
+    const card = cardArray[i];
+    score += CardValue(card);
+   
+  }
+   return score; 
+}
+
+function updateScores(){
+  dealerScore = getScore(dealerCards);
+  playerScore = getScore(playerCards); 
 }
 
 
-
-
-
-
-function shuffle(deck)
-{
-	for (let i = 0; i < 1000; i++)
-	{
-		const shuffle1 = Math.floor((Math.random() * deck.length));
-		const shuffle2 = Math.floor((Math.random() * deck.length));
-		//const tmp = deck[location1];
-
-		//deck[location1] = deck[location2];
-		//deck[location2] = tmp;
-	}
+function nextCard() {
+  return deck.shift();
 }
