@@ -128,6 +128,30 @@ function(){
 });
 
 
+
+function getScore(cardArray){
+  score = 0;
+ for(let i = 0; i < cardArray.length; i++) {
+   const card = cardArray[i];
+   score += CardValue(card);
+  
+ }
+  return score; 
+}
+
+function updateScores(){
+ dealerScore = getScore(dealerCards);
+ playerScore = getScore(playerCards); 
+}
+
+
+function nextCard() {
+ return deck.shift();
+}
+
+
+
+
 function checkEnd(){
   updateScores();
   
@@ -160,6 +184,7 @@ function checkEnd(){
       }
     }
 }
+
 
 
 function showStatus()
@@ -205,24 +230,4 @@ function showStatus()
     stayButton.style.display = '';
     
   }
-}
-
-function getScore(cardArray){
-   score = 0;
-  for(let i = 0; i < cardArray.length; i++) {
-    const card = cardArray[i];
-    score += CardValue(card);
-   
-  }
-   return score; 
-}
-
-function updateScores(){
-  dealerScore = getScore(dealerCards);
-  playerScore = getScore(playerCards); 
-}
-
-
-function nextCard() {
-  return deck.shift();
 }
