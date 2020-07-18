@@ -7,9 +7,6 @@ newGameButton = document.getElementById('new-game-button');
 hitButton = document.getElementById('hit-button');
 stayButton = document.getElementById('stay-button');
 
-hitButton.style.display = '';
-stayButton.style.display = '';
-
   gameStart = false,
   gameOver = false,
   playWon = false,
@@ -30,9 +27,7 @@ function() {
   
   dealerCards = [nextCard(), nextCard()];
   playerCards = [nextCard(), nextCard()];
-  newGameButton.style.display = '';
-  hitButton.style.display = '';
-  stayButton.style.display = '';
+
   showStatus();
 })
 
@@ -60,21 +55,20 @@ function shuffleDeck(deck){
   }
 }
 
-
 function getCard(card) {
     return card.value + "  " + card.suit;
   }
   
   function CardValue(card){
     switch(card.value){
-            /*
+            
       case "Jack":
         return 10;
       case 'Kind':
         return 10;
       case 'Queen':
         return 10;  
-          */
+          
       case 'Ace':
         return 11;
             break;
@@ -103,9 +97,8 @@ function getCard(card) {
         return 9;
         break;
 
-      default:
-        return 10;
-        break; 
+        default :
+          return 10;
     }
   }
 
