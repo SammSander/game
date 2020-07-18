@@ -10,7 +10,7 @@ stayButton = document.getElementById('stay-button');
 hitButton.style.display = '';
 stayButton.style.display = '';
 
-let gameStart = false,
+  gameStart = false,
   gameOver = false,
   playWon = false,
   dealerCards = [],
@@ -37,7 +37,7 @@ function() {
 })
 
 function createDeck() {
-  let deck = []
+  const deck = []
   for (let i = 0; i < suits.length; i++) {
     for (let x = 0; x < values.length; x++) {
       const card = {
@@ -165,11 +165,7 @@ function checkEnd(){
 function showStatus()
 {
   if(!gameStarted)
-  {
-      
-    textArea.innerHTML = 'This Is A Blackjack Game';
-    return; 
-  }
+  {}
   
   let dealerCardString = '';
   for(let i = 0; i < dealerCards.length; i++)
@@ -212,7 +208,7 @@ function showStatus()
 }
 
 function getScore(cardArray){
-  let score = 0;
+   score = 0;
   for(let i = 0; i < cardArray.length; i++) {
     const card = cardArray[i];
     score += CardValue(card);
